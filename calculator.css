@@ -2,3 +2,10 @@
     overflow: scroll;
     height: 150px;
 }
+
+#keyboard {
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: repeat(3, auto);
+    gap: 1px 1px;
+}
