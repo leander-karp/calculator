@@ -3,10 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Calculator</title>
     <link rel="stylesheet" type="text/css" href="calculator.css">
 </head>
 <body>
+    <h1>Calculator</h1>
+
+    <div id="display">
+        <label for="expression">Expression:</label>
+        <input type="text" id="expression" name="expression" size="40" required>
+    </div>
+    <hr>
+    <div id="history">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ut arcu tristique, pulvinar dui vitae, tristique tortor. Nullam mattis eros nisl, sit amet ullamcorper justo tincidunt id. Suspendisse ullamcorper congue sapien, vel viverra tortor lacinia nec. Sed eleifend eu nisi id efficitur. Vestibulum interdum elit vitae odio imperdiet lacinia. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent sodales nibh odio, nec interdum dui rhoncus vel. Vivamus porttitor in mi ut tristique. Nunc tristique, nisl vel viverra dignissim, erat dolor imperdiet nunc, eget efficitur urna nulla sit amet tortor. Fusce eu sem tincidunt, vestibulum tortor vehicula, pellentesque dui. Vivamus eros nisi, malesuada ac eros eu, semper tristique turpis. Aenean pharetra ligula euismod lorem ullamcorper commodo. Pellentesque in enim sed nisi sodales rhoncus. Proin faucibus odio eget mi maximus, malesuada egestas enim sagittis.
+        Vestibulum orci odio, volutpat sit amet libero non, congue hendrerit tortor. Nullam ut convallis lorem. Aliquam sollicitudin vel ex id lacinia. Aenean id est vel nibh porttitor vulputate et faucibus velit. Integer eu quam in justo consequat consequat fermentum vel dui. Praesent porta felis a odio commodo hendrerit eu sed velit. Vestibulum ipsum risus, imperdiet non erat ac, dapibus posuere ante. Vivamus pellentesque mauris erat, et eleifend purus imperdiet sit amet. In gravida, ipsum vitae porta tristique, ipsum nulla interdum ligula, a auctor mauris enim a dui. Cras fringilla eros enim, et ornare dui pulvinar id.
+        Vivamus luctus, diam at rhoncus varius, purus lorem vehicula nisl, sit amet aliquam eros quam in elit. Nullam vestibulum bibendum sapien, ut fermentum eros varius sed. Morbi viverra mauris eget mollis volutpat. Mauris ornare vestibulum lorem eget lacinia. Aenean vitae odio id est tincidunt vulputate in sed neque. Mauris volutpat, diam ut pharetra gravida, tortor ligula tristique orci, a dignissim ligula lacus et nisl. Ut a congue elit.
+        Suspendisse ut ultricies odio. Phasellus vestibulum tincidunt turpis varius dapibus. Duis tincidunt porttitor mauris. Etiam nec molestie nisl. Cras quis est imperdiet, molestie ligula at, cursus sem. Morbi iaculis massa dolor, ut condimentum justo blandit vitae. Nam lobortis lectus in odio fermentum, a fringilla sapien iaculis. Sed vitae enim in magna tincidunt accumsan. Aliquam volutpat mattis sagittis. Phasellus et augue gravida, efficitur tellus et, finibus mauris. Curabitur vehicula fringilla enim. Pellentesque mollis auctor est, in scelerisque lacus pharetra vel.
+        Donec interdum quam ipsum, vel pharetra sem suscipit nec. Phasellus elementum aliquet mauris, eu rhoncus nisi tempor vitae. Vestibulum ac condimentum ipsum. Phasellus eget ipsum vitae dolor rhoncus tempor eu vitae quam. Morbi consequat ultricies nisi sed pulvinar. Proin in bibendum purus. Cras pretium ligula in eros ultrices convallis. Vestibulum faucibus diam arcu, quis congue sapien condimentum et. Nullam quis finibus orci, sed luctus risus. Vestibulum facilisis nunc id neque consectetur varius.
+    </div>
+    <hr>
     <div id="keyboard">
         <button class="number-button" value="0">0</button>
         <button class="number-button" value="1">1</button>
@@ -19,6 +34,14 @@
         <button class="number-button" value="8">8</button>
         <button class="number-button" value="9">9</button>
         <button class="float-button" value=".">.</button>
+        <button class="solve-button" value="solve">solve</button>
+        <button class="clear-history-button" value="clear-history">clear history</button>
+        <button class="clear-button" value="clear-history">clear</button>
+        <button class="operator-button" value="+">+</button>
+        <button class="operator-button" value="*">*</button>
+        <button class="operator-button" value="-">-</button>
+        <button class="operator-button" value="/">/</button>
+        <button class="operator-button" value="**">**</button>
     </div>
 </body>
 <script src="calculator.js"></script>
