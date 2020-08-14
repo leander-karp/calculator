@@ -18,7 +18,10 @@ function createOperator(operator){
                 b = secondOperand();
             }
             else if (typeof secondOperand!="number"){
-                return secondOperand;
+                if (!operator.length >= 2)
+                    {return secondOperand;}
+                else 
+                    {return operator(a);}
             }
             return operator(a, b);
         }
@@ -29,7 +32,14 @@ function createOperator(operator){
 
 const add = createOperator((a,b) => a+b);
 const subtract = createOperator((a,b) => a-b);
-const divide = createOperator((a,b) => {
-    return (b==0)?"ZeroDivisionError":a/b;
-});
+const divide = createOperator((a,b) => (b==0)?"ZeroDivisionError":a/b);
+const multiply = createOperator((a,b) => a*b);
+const pow = createOperator((a,b) => a**b);
+const negative = createOperator((a) => multiply(-1, a)());
+
 console.log(add(1,2)());
+console.log(subtract(2,3)());
+console.log(divide(1,0)());
+console.log(multiply(2,2)());
+console.log(pow(2,2)());
+console.log(negative(10)());
