@@ -4,7 +4,7 @@ class Failure{
     }
 }
 
-function failureWatcher(f){
+function failureWatcher(operatorFunction){
     function wrapper(a, b){
         if (a instanceof Failure){
             return a;
@@ -12,11 +12,11 @@ function failureWatcher(f){
         else if (b instanceof Failure){
             return b;
         }
-        else if (f.length == 2){
-            return f(a,b);
+        else if (operatorFunction.length == 2){
+            return operatorFunction(a,b);
         }
         else {
-            return f(a); 
+            return operatorFunction(a); 
         }
     }
     return wrapper;
@@ -93,7 +93,6 @@ function solve(expression){
         
         if (is_Numerical(token)){
             values.push(Number(token));
-            numberInValues = true;
         }
         else if (token == "("){
             operators.push(token);
@@ -115,7 +114,6 @@ function solve(expression){
                     previous in binaryOperators
                     )){
                 //unary Operator
-                //console.log("Unary Operator:" , token);
                 //operators.push(token);
                 values.push(new Failure("Cannot solve unary operators."));
             }
@@ -124,6 +122,7 @@ function solve(expression){
                 let top = peek(operators);
                 while (top != null && !"()".includes(top) &&
                     binaryOperatorPrecedence[top] >= binaryOperatorPrecedence[token]){
+                        
                         execute(binaryOperators[operators.pop()], values);
                         top = peek(operators);
                 }
