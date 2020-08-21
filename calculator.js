@@ -1,25 +1,37 @@
 class Failure{
+    /*
+    Class in order to distinguish between Errors
+    and calculated results.
+    */
     constructor(msg){
         this.message = msg;
     }
 }
 
 function failureWatcher(operatorFunction){
-    function wrapper(a, b){
+    /*
+    Basic wrapper for Operator functions.
+    It catches occurring Failure return values.
+    */
+    function unaryWrapper(a){
+        if (a instanceof Failure){
+            return a;
+        }
+        const result = operatorFunction(a);
+        return result;
+    }
+    function binaryWrapper(a, b){
         if (a instanceof Failure){
             return a;
         }
         else if (b instanceof Failure){
             return b;
         }
-        else if (operatorFunction.length == 2){
-            return operatorFunction(a,b);
-        }
-        else {
-            return operatorFunction(a); 
-        }
+        const result = operatorFunction(a,b);
+        return result;
     }
-    return wrapper;
+    
+    return operatorFunction.length==2? binaryWrapper:unaryWrapper;
 }
 
 const binaryOperators = {
@@ -43,11 +55,6 @@ const unaryOperators = {
     "+": failureWatcher((a) => a),
 }
 
-const unaryOperatorsPrecedence = {
-    "-": 2,
-    "+": 2,
-}
-
 function solve(expression){
     /*
     Inspired by:
@@ -56,6 +63,7 @@ function solve(expression){
     http://wcipeg.com/wiki/Shunting_yard_algorithm
     */
     function is_Numerical(tokenToTest){
+        /*Tests if a given token can be convertet into an numeric value.*/
         return !isNaN(Number(tokenToTest));
     }
     function peek(stack){
@@ -67,7 +75,10 @@ function solve(expression){
     function execute(operator, values){
         if (operator.length == 2){
             const right = values.pop();
-            const left = values.pop();
+            let left = values.pop();
+            if (left == undefined){
+                left = new Failure("Invalid Expression");
+            }
             values.push(operator(left, right));
         }
         else if (operator.length == 1) {
@@ -79,8 +90,11 @@ function solve(expression){
         }
     }
 
-    const tokens = expression.match(/[\d\.]+|[-\/\+*()\^]/g) || [];
+    let _tokens = expression.match(/[\d\.]+|[-\/\+*()\^]/g) || [];
+    const tokens = Array.from(_tokens);
     const valid = expression.match(/[^\d\.\/\+\s*()\^-]+/g)==null;
+    // Validation with regular expression to catch most of the invalid
+    // formed formula.
     const values = [];
     const operators = [];
 
@@ -88,7 +102,8 @@ function solve(expression){
         return "Invalid Expression";
     }
 
-    for (let index = 0; index < tokens.length; index++) {
+    let index = 0; 
+    while (index < tokens.length ) {
         const token = tokens[index];
         
         if (is_Numerical(token)){
@@ -104,25 +119,28 @@ function solve(expression){
                 top = peek(operators);
             }
             operators.pop();
-
         }
-        else {
+        else if (token in binaryOperators || token in unaryOperators){
             const previous = previousToken(index, tokens);
             if (token in unaryOperators && (
                     previous == null || 
-                    previous == ")" ||
+                    previous == "(" ||
                     previous in binaryOperators
-                    )){
+            )){
                 //unary Operator
-                //operators.push(token);
-                values.push(new Failure("Cannot solve unary operators."));
+                values.push(1);
+                execute(unaryOperators[token], values);
+
+                if (previous != null || index == 0){
+                    tokens.splice(index+1, 0, "*");
+                }
             }
             else{
                 // binary Operator
                 let top = peek(operators);
                 while (top != null && !"()".includes(top) &&
                     binaryOperatorPrecedence[top] >= binaryOperatorPrecedence[token]){
-                        
+
                         execute(binaryOperators[operators.pop()], values);
                         top = peek(operators);
                 }
@@ -130,6 +148,12 @@ function solve(expression){
             }
 
         }
+        else {
+            // There is an invalid token, which passed the regex and
+            // all conditions above.
+            values.push(new Failure("Invalid Expression"));
+        }
+        index++;
     }
 
     while (peek(operators) != null){
@@ -152,7 +176,6 @@ function solve(expression){
 
 const solveButton = document.querySelector(".solve-button");
 solveButton.addEventListener("click", () => {
-    console.log(document.getElementById("expression").value);
     const expression = document.getElementById("expression").value;
 
     const item = document.createElement("div");
@@ -192,10 +215,10 @@ clearHistoryButton.addEventListener("click", () => {
 
 
 function test(){
-    console.log(solve("---(1--2--3-   --4)")); // 7 unary operators
-    console.log(solve("   ++(1) + + + 1++1+++1 ")); // 7 unary operators
-    console.log(solve("(1+2.001)*3/2-4^0"));
-    console.log(solve("1+2.001*3"));
+    // console.log(solve("---(1--2--3-   --4)")); // 7 unary operators
+    // console.log(solve("   ++(1) + + + 1++1+++1 ")); // 7 unary operators
+    // console.log(solve("(1+2.001)*3/2-4^0"));
+    // console.log(solve("1+2.001*3"));
 
    // empty input 
    console.assert(solve(" ") == "",);
@@ -210,8 +233,14 @@ function test(){
    console.assert(solve("2^2^2") == "16");
 
    // unary operators
-   console.assert(false, "Unary Operators are missing");
-   console.assert(solve("---1") == "-1", solve("---1"));
+//    console.assert(false, "Unary Operators are missing");
+   console.assert(solve("---1") == "-1");
+   console.assert(solve("--1---1") == "0");
+   console.assert(solve("-1-1") == "-2");
+   console.assert(solve("--1") == "1");
+
+   console.assert(solve("++1") == "1");
+   console.assert(solve("-1+-4") == "-5");
 
 
    // rounding
